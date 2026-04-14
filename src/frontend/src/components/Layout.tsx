@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useInternetIdentity } from "@caffeineai/core-infrastructure";
 import {
   AlertTriangle,
   Bell,
@@ -44,23 +43,18 @@ const sidebarBottomItems = [
 
 export function Layout({ children, activeItem = "ai-insights" }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { clear } = useInternetIdentity();
 
   const handleLogout = () => {
-    try {
-      clear();
-    } catch {
-      window.location.reload();
-    }
+    window.alert("You have been logged out.");
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[oklch(0.25_0.18_270)] shadow-elevated h-14 flex items-center px-4 gap-3">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[oklch(0.93_0.07_270)] border-b border-[oklch(0.86_0.1_270)] shadow-xs h-14 flex items-center px-4 gap-3">
         <button
           type="button"
-          className="lg:hidden text-white/80 hover:text-white transition-colors p-1"
+          className="lg:hidden text-[oklch(0.32_0.12_270)] hover:text-[oklch(0.22_0.14_270)] transition-colors p-1"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           onKeyDown={(e) => e.key === "Enter" && setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle sidebar"
@@ -70,10 +64,14 @@ export function Layout({ children, activeItem = "ai-insights" }: LayoutProps) {
 
         {/* Logo + Title */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary/30 border border-white/20 flex items-center justify-center">
-            <Zap size={16} className="text-white" fill="currentColor" />
+          <div className="w-8 h-8 rounded-lg bg-[oklch(0.78_0.15_270)] border border-[oklch(0.68_0.18_270)] flex items-center justify-center">
+            <Zap
+              size={16}
+              className="text-[oklch(0.22_0.1_270)]"
+              fill="currentColor"
+            />
           </div>
-          <span className="font-display font-semibold text-white text-base tracking-tight">
+          <span className="font-display font-semibold text-[oklch(0.22_0.1_270)] text-base tracking-tight">
             AI Insights
           </span>
         </div>
@@ -85,7 +83,7 @@ export function Layout({ children, activeItem = "ai-insights" }: LayoutProps) {
             type="button"
             data-ocid="navbar.bell_button"
             aria-label="Notifications"
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-lg text-[oklch(0.42_0.14_270)] hover:text-[oklch(0.22_0.12_270)] hover:bg-[oklch(0.86_0.1_270)] transition-colors"
           >
             <Bell size={18} />
           </button>
@@ -97,7 +95,7 @@ export function Layout({ children, activeItem = "ai-insights" }: LayoutProps) {
                 type="button"
                 data-ocid="navbar.profile_button"
                 aria-label="Profile menu"
-                className="w-9 h-9 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-lg text-[oklch(0.42_0.14_270)] hover:text-[oklch(0.22_0.12_270)] hover:bg-[oklch(0.86_0.1_270)] transition-colors"
               >
                 <User size={18} />
               </button>
