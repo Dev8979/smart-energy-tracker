@@ -1,0 +1,24 @@
+{
+  "overview": "A modern SaaS-style AI Insights dashboard for tracking smart energy consumption, featuring interactive charts, behavioral recommendations, and dynamic time-range analysis — all powered by mock data and ready for real API integration.",
+  "features": [
+    "Fixed navbar and collapsible sidebar with AI Insights active state",
+    "SummaryBanner with purple gradient, time range selector (7d/30d/90d), and estimated savings",
+    "Usage Trend card with dual-line chart comparing current vs previous period",
+    "Peak Usage Time bar chart with purple-highlighted peak bar and summary stats",
+    "Top Energy Drivers with color-coded stacked progress bars and legend",
+    "Behavioral Advice card with 4 toggleable recommendations and live projected savings",
+    "Responsive 2x2 grid (desktop) → 2-col (tablet) → 1-col (mobile)",
+    "Loading skeleton states with simulated delay"
+  ],
+  "category": "productivity",
+  "tags": [
+    "energy",
+    "dashboard",
+    "ai-insights",
+    "saas",
+    "charts",
+    "recharts",
+    "typescript"
+  ],
+  "last_updated": "2026-04-14T08:47:19.051Z"
+}
