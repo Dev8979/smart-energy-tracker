@@ -12,7 +12,7 @@ import {
   YAxis,
 } from "recharts";
 
-const PURPLE = "oklch(0.68 0.2 270)";
+const PURPLE = "oklch(0.68 0.2 310)";
 const AMBER = "oklch(0.72 0.2 55)";
 const GRID_COLOR = "oklch(0.91 0.005 260)";
 const TICK_COLOR = "oklch(0.52 0.01 260)";
@@ -89,7 +89,7 @@ export function InsightCardPeakUsageTime({ range }: { range: TimeRange }) {
               <Cell
                 key={entry.hour}
                 fill={
-                  entry.hour === PEAK_HOUR ? "oklch(0.78 0.14 270)" : PURPLE
+                  entry.hour === PEAK_HOUR ? "oklch(0.78 0.14 310)" : PURPLE
                 }
               />
             ))}

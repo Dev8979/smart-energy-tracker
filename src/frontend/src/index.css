@@ -34,8 +34,8 @@
     --popover: 1.0 0.0 0;
     --popover-foreground: 0.16 0.01 260;
 
-    --primary: 0.72 0.18 270;
-    --primary-foreground: 0.18 0.04 270;
+    --primary: 0.72 0.18 310;
+    --primary-foreground: 0.18 0.04 310;
 
     --secondary: 0.96 0.01 75;
     --secondary-foreground: 0.25 0.03 50;
@@ -50,22 +50,22 @@
 
     --border: 0.91 0.005 260;
     --input: 0.91 0.005 260;
-    --ring: 0.72 0.18 270;
+    --ring: 0.72 0.18 310;
 
-    --chart-1: 0.72 0.18 270;
+    --chart-1: 0.72 0.18 310;
     --chart-2: 0.72 0.2 55;
     --chart-3: 0.65 0.18 145;
     --chart-4: 0.75 0.15 190;
     --chart-5: 0.5 0.2 25;
 
-    --sidebar: 0.96 0.005 270;
+    --sidebar: 0.96 0.005 310;
     --sidebar-foreground: 0.16 0.01 260;
-    --sidebar-primary: 0.72 0.18 270;
-    --sidebar-primary-foreground: 0.18 0.04 270;
+    --sidebar-primary: 0.72 0.18 310;
+    --sidebar-primary-foreground: 0.18 0.04 310;
     --sidebar-accent: 0.94 0.01 260;
     --sidebar-accent-foreground: 0.25 0.03 50;
     --sidebar-border: 0.91 0.005 260;
-    --sidebar-ring: 0.72 0.18 270;
+    --sidebar-ring: 0.72 0.18 310;
   }
 
   .dark {
@@ -76,7 +76,7 @@
     --popover: 0.22 0.01 260;
     --popover-foreground: 0.94 0.01 260;
 
-    --primary: 0.85 0.12 270;
+    --primary: 0.85 0.12 310;
     --primary-foreground: 0.145 0.01 260;
 
     --secondary: 0.22 0.015 260;
@@ -92,9 +92,9 @@
 
     --border: 0.28 0.01 260;
     --input: 0.28 0.01 260;
-    --ring: 0.85 0.12 270;
+    --ring: 0.85 0.12 310;
 
-    --chart-1: 0.85 0.12 270;
+    --chart-1: 0.85 0.12 310;
     --chart-2: 0.78 0.18 55;
     --chart-3: 0.65 0.18 145;
     --chart-4: 0.75 0.15 190;
@@ -102,12 +102,12 @@
 
     --sidebar: 0.185 0.01 260;
     --sidebar-foreground: 0.94 0.01 260;
-    --sidebar-primary: 0.85 0.12 270;
+    --sidebar-primary: 0.85 0.12 310;
     --sidebar-primary-foreground: 0.145 0.01 260;
     --sidebar-accent: 0.22 0.015 260;
     --sidebar-accent-foreground: 0.85 0.01 260;
     --sidebar-border: 0.28 0.01 260;
-    --sidebar-ring: 0.85 0.12 270;
+    --sidebar-ring: 0.85 0.12 310;
   }
 
   * {

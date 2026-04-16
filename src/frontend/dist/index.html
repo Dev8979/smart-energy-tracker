@@ -1,19 +1,1280 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Energy Tracker</title>
-    <meta name="description" content="Built with caffeine.ai" />
-    <meta property="og:title" content="Smart Energy Tracker" />
-    <meta property="og:description" content="Built with caffeine.ai" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <script type="module" crossorigin src="/assets/index-CRgqKYh0.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D9unOw74.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Energy Tracker</title>
+  <meta name="description" content="AI-powered smart energy dashboard" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #cc69ca;
+      --accent-light: #d980d7;
+      --accent-dark: #a84fa6;
+      --accent-faint: rgba(204,105,202,0.12);
+      --sidebar-bg: #1a1628;
+      --sidebar-width: 224px;
+      --navbar-height: 56px;
+      --card-bg: #ffffff;
+      --page-bg: #f4f6fb;
+      --text-primary: #1a1628;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 24px rgba(0,0,0,0.12);
+      --radius: 12px;
+      --amber: #f59e0b;
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --red: #ef4444;
+    }
+
+    html, body {
+      font-family: 'Inter', sans-serif;
+      background: var(--page-bg);
+      color: var(--text-primary);
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────────────── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--navbar-height);
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: var(--sidebar-width);
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-size: 18px;
+      line-height: 1;
+      transition: background 0.2s;
+      display: none;
+    }
+    .hamburger:hover { background: var(--accent-faint); }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .navbar-logo .bolt {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 7px;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    .navbar-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+
+    .search-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-bar input {
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px 6px 36px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+      color: var(--text-primary);
+      background: var(--page-bg);
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar .search-icon {
+      position: absolute;
+      left: 11px;
+      color: var(--text-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      padding: 4px;
+      line-height: 1;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .notif-btn:hover { background: var(--accent-faint); }
+    .notif-badge {
+      position: absolute;
+      top: -2px; right: -2px;
+      background: var(--red);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 0 4px;
+      min-width: 16px;
+      height: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      border-radius: 24px;
+      padding: 4px 10px 4px 4px;
+      transition: background 0.2s;
+    }
+    .user-info:hover { background: var(--accent-faint); }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ─── SIDEBAR ─────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: var(--navbar-height);
+      left: 0;
+      width: var(--sidebar-width);
+      height: calc(100vh - var(--navbar-height));
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      z-index: 90;
+      transition: transform 0.3s ease;
+      overflow: hidden;
+    }
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+    .sidebar-logo .bolt-sm {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-radius: 7px;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+    .sidebar-nav::-webkit-scrollbar { width: 3px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.35);
+      padding: 12px 18px 6px;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      margin: 2px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .nav-item.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    .nav-item.logout { color: rgba(255,100,100,0.7); }
+    .nav-item.logout:hover { background: rgba(239,68,68,0.12); color: rgba(255,100,100,1); }
+
+    /* ─── SIDEBAR PROFILE CARD ─────────────────────────────── */
+    .sidebar-profile {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 14px 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sidebar-profile:hover { background: rgba(255,255,255,0.06); }
+    .sidebar-profile .avatar-lg {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .sidebar-profile-info { overflow: hidden; }
+    .sidebar-profile-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-profile-email {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ─── MAIN CONTENT ─────────────────────────────────────── */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      margin-top: var(--navbar-height);
+      padding: 28px 28px 48px;
+      min-height: calc(100vh - var(--navbar-height));
+    }
+
+    .page-header {
+      margin-bottom: 22px;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── SUMMARY BANNER ──────────────────────────────────── */
+    .summary-banner {
+      background: linear-gradient(135deg, #7c3aed 0%, var(--accent) 60%, #ec4899 100%);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+    .banner-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .banner-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .banner-subtitle {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+    .banner-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .time-toggle {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 2px;
+      display: flex;
+      gap: 2px;
+    }
+    .time-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.75);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .time-btn.active {
+      background: #ffffff;
+      color: var(--accent-dark);
+    }
+    .efficiency-badge {
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .metric-card {
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 14px 16px;
+      backdrop-filter: blur(6px);
+    }
+    .metric-label {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.75;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metric-value {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .metric-unit {
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .metric-arrow { color: #86efac; font-size: 13px; margin-right: 3px; }
+
+    /* ─── CARDS GRID ──────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #16a34a;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── CHART CONTAINERS ───────────────────────────────── */
+    .chart-wrap {
+      position: relative;
+      height: 200px;
+      margin-bottom: 14px;
+    }
+
+    /* ─── CHART LEGEND ───────────────────────────────────── */
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-line {
+      width: 18px; height: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ─── STAT CHIPS ─────────────────────────────────────── */
+    .stat-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .stat-chip {
+      background: var(--page-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .stat-chip.highlight { background: var(--accent-faint); border-color: var(--accent); color: var(--accent-dark); }
+
+    /* ─── PEAK STATS ─────────────────────────────────────── */
+    .peak-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .peak-stat {
+      background: var(--page-bg);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .peak-stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .peak-stat-value { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+
+    /* ─── ENERGY DRIVERS ─────────────────────────────────── */
+    .driver-row {
+      margin-bottom: 16px;
+    }
+    .driver-row:last-child { margin-bottom: 0; }
+    .driver-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .driver-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .driver-pct { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .driver-bar-bg {
+      height: 10px;
+      background: var(--page-bg);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+    .driver-seg {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.6s ease;
+    }
+
+    .driver-legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .driver-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .driver-legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ─── BEHAVIORAL ADVICE ──────────────────────────────── */
+    .advice-list { display: flex; flex-direction: column; gap: 0; }
+    .advice-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+    .advice-item:last-child { border-bottom: none; }
+    .advice-info { flex: 1; min-width: 0; }
+    .advice-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .advice-savings {
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    /* CSS Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #d1d5db;
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      left: 3px; top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    .advice-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .savings-total {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .savings-total span {
+      color: var(--accent);
+    }
+    .advice-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .actions-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .btn-enable-all {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-enable-all:hover { background: var(--accent-dark); }
+    .btn-enable-all:active { transform: scale(0.97); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .navbar-left { min-width: auto; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .search-bar input { width: 160px; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .peak-stats { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .main-content { padding: 16px 14px 40px; }
+      .summary-banner { padding: 18px 16px; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .banner-top { flex-direction: column; }
+      .user-name { display: none; }
+      .search-bar { display: none; }
+    }
+
+    /* ─── OVERLAY ────────────────────────────────────────── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 80;
+    }
+    .sidebar-overlay.visible { display: block; }
+
+    /* ─── SCROLLBAR ──────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── SIDEBAR OVERLAY ─────────────────────────────────── -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ─── NAVBAR ─────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+      <a class="navbar-logo" href="#">
+        <span class="bolt">⚡</span>
+        SmartEnergy
+      </a>
+    </div>
+
+    <div class="navbar-right">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search..." aria-label="Search" />
+      </div>
+
+      <button class="notif-btn" aria-label="Notifications">
+        🔔
+        <span class="notif-badge">3</span>
+      </button>
+
+      <div class="user-info" role="button" aria-label="User menu">
+        <div class="avatar">VS</div>
+        <span class="user-name">Vyakhya</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="bolt-sm">⚡</span>
+      SmartEnergy
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Main navigation">
+      <div class="nav-section-label">Main Menu</div>
+
+      <a href="#" class="nav-item active" data-page="dashboard" onclick="setActive(this, event)">
+        <span class="nav-icon">🏠</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-page="daily" onclick="setActive(this, event)">
+        <span class="nav-icon">📅</span> Daily Entries
+      </a>
+      <a href="#" class="nav-item" data-page="appliances" onclick="setActive(this, event)">
+        <span class="nav-icon">🔌</span> My Appliances
+      </a>
+      <a href="#" class="nav-item" data-page="trends" onclick="setActive(this, event)">
+        <span class="nav-icon">📈</span> Usage Trends
+      </a>
+      <a href="#" class="nav-item" data-page="insights" onclick="setActive(this, event)">
+        <span class="nav-icon">🤖</span> AI Insights
+      </a>
+      <a href="#" class="nav-item" data-page="settings" onclick="setActive(this, event)">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+
+      <div class="nav-section-label" style="margin-top:8px;">Account</div>
+
+      <a href="#" class="nav-item logout">
+        <span class="nav-icon">🚪</span> Log Out
+      </a>
+    </nav>
+
+    <div class="sidebar-profile">
+      <div class="avatar-lg">VS</div>
+      <div class="sidebar-profile-info">
+        <div class="sidebar-profile-name">Vyakhya Sharma</div>
+        <div class="sidebar-profile-email">vyakhya2@gmail.com</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT ─────────────────────────────────────── -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>AI Insights</h1>
+      <p>Smart analysis powered by your energy data</p>
+    </div>
+
+    <!-- Summary Banner -->
+    <div class="summary-banner" id="summaryBanner">
+      <div class="banner-top">
+        <div>
+          <div class="banner-title">Energy Efficiency Summary</div>
+          <div class="banner-subtitle">Real-time insights based on your consumption patterns</div>
+        </div>
+        <div class="banner-controls">
+          <div class="time-toggle">
+            <button class="time-btn active" data-range="7d" onclick="setTimeRange(this)">7 Days</button>
+            <button class="time-btn" data-range="30d" onclick="setTimeRange(this)">30 Days</button>
+            <button class="time-btn" data-range="90d" onclick="setTimeRange(this)">90 Days</button>
+          </div>
+          <div class="efficiency-badge" id="efficiencyBadge">✨ Excellent</div>
+        </div>
+      </div>
+      <div class="metrics-grid" id="metricsGrid"></div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+
+      <!-- Usage Trend Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Usage Trend</div>
+            <div class="card-subtitle">Daily consumption — current vs previous period</div>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#cc69ca;"></div>
+            Current Period
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:#f59e0b; border-top: 2px dashed #f59e0b; height:0;"></div>
+            Previous Period
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="usageTrendChart"></canvas>
+        </div>
+        <div class="stat-chips">
+          <div class="stat-chip">Avg Daily: 28.6 kWh</div>
+          <div class="stat-chip highlight">Peak Day: 35 kWh (Thu)</div>
+          <div class="stat-chip">vs Prior: -3.2%</div>
+        </div>
+      </div>
+
+      <!-- Peak Usage Time Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Peak Usage Time</div>
+            <div class="card-subtitle">Hourly consumption distribution today</div>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#cc69ca;"></div>
+            Peak Usage
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#f59e0b;"></div>
+            Average Usage
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="peakUsageChart"></canvas>
+        </div>
+        <div class="peak-stats">
+          <div class="peak-stat">
+            <div class="peak-stat-label">Peak Hour</div>
+            <div class="peak-stat-value">12PM–1PM</div>
+          </div>
+          <div class="peak-stat">
+            <div class="peak-stat-label">Max Load</div>
+            <div class="peak-stat-value">12 kWh</div>
+          </div>
+          <div class="peak-stat">
+            <div class="peak-stat-label">Off-Peak Savings</div>
+            <div class="peak-stat-value" style="color:#22c55e;">40%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Energy Drivers Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Top Energy Drivers</div>
+            <div class="card-subtitle">Breakdown by usage category</div>
+          </div>
+          <div class="live-badge">
+            <div class="live-dot"></div>
+            Live
+          </div>
+        </div>
+        <div id="energyDrivers"></div>
+        <div class="driver-legend" id="driverLegend"></div>
+      </div>
+
+      <!-- Behavioral Advice Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Behavioral Advice</div>
+            <div class="card-subtitle">Personalised energy-saving recommendations</div>
+          </div>
+        </div>
+        <div class="advice-list" id="adviceList"></div>
+        <div class="advice-footer">
+          <div class="savings-total">Projected Savings: <span id="projectedSavings">$34.80</span>/mo</div>
+          <div class="advice-actions">
+            <span class="actions-label" id="actionsLabel">3 actions active</span>
+            <button class="btn-enable-all" onclick="enableAll()">Enable All</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+  </main><!-- /main-content -->
+
+  <script>
+    /* ─── MOCK DATA ─────────────────────────────────────────── */
+    const mockData = {
+      '7d': {
+        efficiency: '✨ Excellent',
+        metrics: [
+          { label: 'Efficiency Rate', value: '87', unit: '%' },
+          { label: 'Energy Saved',    value: '42', unit: ' kWh' },
+          { label: 'Avg Daily Usage', value: '18.5', unit: ' kWh' },
+          { label: 'Est. Monthly Savings', value: '$34.20', unit: '', arrow: true }
+        ],
+        usageTrend: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          current:  [28, 32, 25, 35, 30, 22, 28],
+          previous: [30, 28, 32, 27, 35, 30, 25]
+        }
+      },
+      '30d': {
+        efficiency: '⚡ Good',
+        metrics: [
+          { label: 'Efficiency Rate', value: '81', unit: '%' },
+          { label: 'Energy Saved',    value: '160', unit: ' kWh' },
+          { label: 'Avg Daily Usage', value: '21.3', unit: ' kWh' },
+          { label: 'Est. Monthly Savings', value: '$48.60', unit: '', arrow: true }
+        ],
+        usageTrend: {
+          labels: ['Wk1', 'Wk2', 'Wk3', 'Wk4'],
+          current:  [142, 165, 138, 156],
+          previous: [158, 171, 150, 162]
+        }
+      },
+      '90d': {
+        efficiency: '📊 Average',
+        metrics: [
+          { label: 'Efficiency Rate', value: '76', unit: '%' },
+          { label: 'Energy Saved',    value: '490', unit: ' kWh' },
+          { label: 'Avg Daily Usage', value: '24.1', unit: ' kWh' },
+          { label: 'Est. Monthly Savings', value: '$62.40', unit: '', arrow: true }
+        ],
+        usageTrend: {
+          labels: ['Jan', 'Feb', 'Mar'],
+          current:  [540, 480, 510],
+          previous: [620, 580, 570]
+        }
+      }
+    };
+
+    const peakData = {
+      labels: ['6AM','7AM','8AM','9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM'],
+      peak:    [2, 3, 5, 4, 8, 12, 10, 9, 7, 6, 5, 4],
+      average: [2, 2, 3, 3,  5,  7,  6, 5, 4, 4, 3, 3]
+    };
+
+    const energyDrivers = [
+      {
+        name: 'Overall Consumption', pct: 75,
+        segments: [
+          { color: '#cc69ca', width: 45 },
+          { color: '#4ade80', width: 30 }
+        ]
+      },
+      {
+        name: 'Easiest to Reduce', pct: 60,
+        segments: [
+          { color: '#fbbf24', width: 40 },
+          { color: '#f87171', width: 20 }
+        ]
+      },
+      {
+        name: 'Peak Hour Charge', pct: 85,
+        segments: [
+          { color: '#60a5fa', width: 55 },
+          { color: '#cc69ca', width: 30 }
+        ]
+      },
+      {
+        name: 'Cooled Energy', pct: 50,
+        segments: [
+          { color: '#4ade80', width: 30 },
+          { color: '#fbbf24', width: 20 }
+        ]
+      }
+    ];
+
+    const driverLegendItems = [
+      { color: '#cc69ca', label: 'Primary' },
+      { color: '#4ade80', label: 'Secondary' },
+      { color: '#fbbf24', label: 'Tertiary' },
+      { color: '#f87171', label: 'Peak' },
+      { color: '#60a5fa', label: 'Base Load' }
+    ];
+
+    const adviceData = [
+      { id: 'laundry',  title: 'Shift laundry to off-peak hours', savings: 8.40,  enabled: true  },
+      { id: 'ac',       title: 'Reduce AC setpoint by 2°F',        savings: 12.10, enabled: true  },
+      { id: 'standby',  title: 'Enable smart standby mode',        savings: 5.60,  enabled: false },
+      { id: 'ev',       title: 'Optimize EV charging schedule',    savings: 14.30, enabled: true  }
+    ];
+
+    /* ─── STATE ─────────────────────────────────────────────── */
+    let currentRange = '7d';
+    let trendChart = null;
+    let peakChart  = null;
+    let adviceState = adviceData.map(a => ({ ...a }));
+
+    /* ─── SIDEBAR ───────────────────────────────────────────── */
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('visible');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('visible');
+    }
+    function setActive(el, e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      closeSidebar();
+    }
+
+    /* ─── TIME RANGE ─────────────────────────────────────────── */
+    function setTimeRange(btn) {
+      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRange = btn.dataset.range;
+      updateBanner();
+      updateTrendChart();
+    }
+
+    /* ─── BANNER ─────────────────────────────────────────────── */
+    function updateBanner() {
+      const d = mockData[currentRange];
+      document.getElementById('efficiencyBadge').textContent = d.efficiency;
+      const grid = document.getElementById('metricsGrid');
+      grid.innerHTML = d.metrics.map(m => `
+        <div class="metric-card">
+          <div class="metric-label">${m.label}</div>
+          <div class="metric-value">
+            ${m.arrow ? '<span class="metric-arrow">↑</span>' : ''}${m.value}
+          </div>
+          <div class="metric-unit">${m.unit}</div>
+        </div>
+      `).join('');
+    }
+
+    /* ─── USAGE TREND CHART ─────────────────────────────────── */
+    function buildTrendChart() {
+      const d = mockData[currentRange].usageTrend;
+      const ctx = document.getElementById('usageTrendChart').getContext('2d');
+      trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: d.labels,
+          datasets: [
+            {
+              label: 'Current',
+              data: d.current,
+              borderColor: '#cc69ca',
+              backgroundColor: 'rgba(204,105,202,0.12)',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              pointBackgroundColor: '#cc69ca',
+              fill: true,
+              tension: 0.4
+            },
+            {
+              label: 'Previous',
+              data: d.previous,
+              borderColor: '#f59e0b',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [6, 4],
+              pointRadius: 3,
+              pointBackgroundColor: '#f59e0b',
+              fill: false,
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, family: 'Inter' }, color: '#9ca3af' }
+            },
+            y: {
+              grid: { color: '#f3f4f6' },
+              ticks: {
+                font: { size: 11, family: 'Inter' },
+                color: '#9ca3af',
+                callback: v => v + ' kWh'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateTrendChart() {
+      const d = mockData[currentRange].usageTrend;
+      trendChart.data.labels = d.labels;
+      trendChart.data.datasets[0].data = d.current;
+      trendChart.data.datasets[1].data = d.previous;
+      trendChart.update();
+    }
+
+    /* ─── PEAK USAGE CHART ──────────────────────────────────── */
+    function buildPeakChart() {
+      const ctx = document.getElementById('peakUsageChart').getContext('2d');
+      const backgroundColors = peakData.peak.map((_, i) =>
+        i === 5 ? '#cc69ca' : 'rgba(204,105,202,0.5)'
+      );
+      peakChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: peakData.labels,
+          datasets: [
+            {
+              label: 'Peak',
+              data: peakData.peak,
+              backgroundColor: backgroundColors,
+              borderRadius: 4,
+              borderSkipped: false,
+              barPercentage: 0.6
+            },
+            {
+              label: 'Average',
+              data: peakData.average,
+              backgroundColor: 'rgba(245,158,11,0.55)',
+              borderRadius: 4,
+              borderSkipped: false,
+              barPercentage: 0.6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 10, family: 'Inter' }, color: '#9ca3af', maxRotation: 0 }
+            },
+            y: {
+              grid: { color: '#f3f4f6' },
+              ticks: {
+                font: { size: 11, family: 'Inter' },
+                color: '#9ca3af',
+                callback: v => v + ' kWh'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /* ─── ENERGY DRIVERS ─────────────────────────────────────── */
+    function buildDrivers() {
+      const container = document.getElementById('energyDrivers');
+      container.innerHTML = energyDrivers.map(d => `
+        <div class="driver-row">
+          <div class="driver-header">
+            <span class="driver-name">${d.name}</span>
+            <span class="driver-pct">${d.pct}%</span>
+          </div>
+          <div class="driver-bar-bg">
+            ${d.segments.map(s => `
+              <div class="driver-seg" style="width:${s.width}%;background:${s.color};"></div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      const legend = document.getElementById('driverLegend');
+      legend.innerHTML = driverLegendItems.map(i => `
+        <div class="driver-legend-item">
+          <div class="driver-legend-dot" style="background:${i.color};"></div>
+          ${i.label}
+        </div>
+      `).join('');
+    }
+
+    /* ─── BEHAVIORAL ADVICE ──────────────────────────────────── */
+    function buildAdvice() {
+      renderAdvice();
+      updateProjectedSavings();
+    }
+
+    function renderAdvice() {
+      const list = document.getElementById('adviceList');
+      list.innerHTML = adviceState.map((a, i) => `
+        <div class="advice-item">
+          <div class="advice-info">
+            <div class="advice-title">${a.title}</div>
+            <div class="advice-savings">Saves $${a.savings.toFixed(2)}/mo</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" ${a.enabled ? 'checked' : ''} onchange="toggleAdvice(${i}, this.checked)" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      `).join('');
+    }
+
+    function toggleAdvice(idx, enabled) {
+      adviceState[idx].enabled = enabled;
+      updateProjectedSavings();
+    }
+
+    function updateProjectedSavings() {
+      const total = adviceState.filter(a => a.enabled).reduce((sum, a) => sum + a.savings, 0);
+      const count = adviceState.filter(a => a.enabled).length;
+      document.getElementById('projectedSavings').textContent = '$' + total.toFixed(2);
+      document.getElementById('actionsLabel').textContent = count + ' action' + (count !== 1 ? 's' : '') + ' active';
+    }
+
+    function enableAll() {
+      adviceState.forEach(a => a.enabled = true);
+      renderAdvice();
+      updateProjectedSavings();
+    }
+
+    /* ─── INIT ──────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', function () {
+      updateBanner();
+      buildTrendChart();
+      buildPeakChart();
+      buildDrivers();
+      buildAdvice();
+    });
+  </script>
+</body>
 </html>

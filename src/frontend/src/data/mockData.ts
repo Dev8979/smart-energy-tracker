@@ -78,7 +78,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Overall Consumption",
       percentage: 100,
       segments: [
-        { label: "HVAC", value: 38, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 38, color: "oklch(0.68 0.2 310)" },
         { label: "Lighting", value: 28, color: "oklch(0.72 0.2 55)" },
         { label: "Appliances", value: 20, color: "oklch(0.65 0.18 145)" },
         { label: "Other", value: 14, color: "oklch(0.75 0.15 190)" },
@@ -88,7 +88,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Easiest to Reduce",
       percentage: 72,
       segments: [
-        { label: "Lighting", value: 50, color: "oklch(0.68 0.2 270)" },
+        { label: "Lighting", value: 50, color: "oklch(0.68 0.2 310)" },
         { label: "Standby", value: 30, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 20, color: "oklch(0.75 0.15 190)" },
       ],
@@ -97,7 +97,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Peak Hour Charge",
       percentage: 55,
       segments: [
-        { label: "HVAC", value: 55, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 55, color: "oklch(0.68 0.2 310)" },
         { label: "EV Charging", value: 30, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 15, color: "oklch(0.65 0.18 145)" },
       ],
@@ -106,7 +106,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Cooled Energy",
       percentage: 40,
       segments: [
-        { label: "AC Units", value: 65, color: "oklch(0.68 0.2 270)" },
+        { label: "AC Units", value: 65, color: "oklch(0.68 0.2 310)" },
         { label: "Ventilation", value: 35, color: "oklch(0.72 0.2 55)" },
       ],
     },
@@ -116,7 +116,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Overall Consumption",
       percentage: 100,
       segments: [
-        { label: "HVAC", value: 42, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 42, color: "oklch(0.68 0.2 310)" },
         { label: "Lighting", value: 23, color: "oklch(0.72 0.2 55)" },
         { label: "Appliances", value: 18, color: "oklch(0.65 0.18 145)" },
         { label: "Other", value: 17, color: "oklch(0.75 0.15 190)" },
@@ -126,7 +126,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Easiest to Reduce",
       percentage: 80,
       segments: [
-        { label: "Lighting", value: 45, color: "oklch(0.68 0.2 270)" },
+        { label: "Lighting", value: 45, color: "oklch(0.68 0.2 310)" },
         { label: "Standby", value: 35, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 20, color: "oklch(0.75 0.15 190)" },
       ],
@@ -135,7 +135,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Peak Hour Charge",
       percentage: 65,
       segments: [
-        { label: "HVAC", value: 60, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 60, color: "oklch(0.68 0.2 310)" },
         { label: "EV Charging", value: 25, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 15, color: "oklch(0.65 0.18 145)" },
       ],
@@ -144,7 +144,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Cooled Energy",
       percentage: 48,
       segments: [
-        { label: "AC Units", value: 70, color: "oklch(0.68 0.2 270)" },
+        { label: "AC Units", value: 70, color: "oklch(0.68 0.2 310)" },
         { label: "Ventilation", value: 30, color: "oklch(0.72 0.2 55)" },
       ],
     },
@@ -154,7 +154,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Overall Consumption",
       percentage: 100,
       segments: [
-        { label: "HVAC", value: 45, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 45, color: "oklch(0.68 0.2 310)" },
         { label: "Lighting", value: 20, color: "oklch(0.72 0.2 55)" },
         { label: "Appliances", value: 22, color: "oklch(0.65 0.18 145)" },
         { label: "Other", value: 13, color: "oklch(0.75 0.15 190)" },
@@ -164,7 +164,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Easiest to Reduce",
       percentage: 88,
       segments: [
-        { label: "Lighting", value: 40, color: "oklch(0.68 0.2 270)" },
+        { label: "Lighting", value: 40, color: "oklch(0.68 0.2 310)" },
         { label: "Standby", value: 38, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 22, color: "oklch(0.75 0.15 190)" },
       ],
@@ -173,7 +173,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Peak Hour Charge",
       percentage: 74,
       segments: [
-        { label: "HVAC", value: 62, color: "oklch(0.68 0.2 270)" },
+        { label: "HVAC", value: 62, color: "oklch(0.68 0.2 310)" },
         { label: "EV Charging", value: 22, color: "oklch(0.72 0.2 55)" },
         { label: "Other", value: 16, color: "oklch(0.65 0.18 145)" },
       ],
@@ -182,7 +182,7 @@ export const energyDriversByRange: Record<TimeRange, EnergyDriver[]> = {
       name: "Cooled Energy",
       percentage: 58,
       segments: [
-        { label: "AC Units", value: 72, color: "oklch(0.68 0.2 270)" },
+        { label: "AC Units", value: 72, color: "oklch(0.68 0.2 310)" },
         { label: "Ventilation", value: 28, color: "oklch(0.72 0.2 55)" },
       ],
     },
